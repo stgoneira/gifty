@@ -17,7 +17,7 @@ public class ProductoListarServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/jsp/listar.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/producto/listar.jsp").forward(req, resp);
     }
     
 }

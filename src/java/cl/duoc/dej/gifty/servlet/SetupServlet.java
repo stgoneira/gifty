@@ -1,7 +1,11 @@
 package cl.duoc.dej.gifty.servlet;
 
+import cl.duoc.dej.gifty.entity.Categoria;
+import cl.duoc.dej.gifty.service.CategoriaService;
 import cl.duoc.dej.gifty.service.SetupService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,8 +31,10 @@ public class SetupServlet extends HttpServlet {
                     instalar(request, response);
                     break;
                 case "desinstalar":
+                    desinstalar(request, response);
                     break;
                 case "cargar":
+                    cargarDatos(request, response);
                     break;
             }
         }
@@ -40,6 +46,41 @@ public class SetupServlet extends HttpServlet {
         boolean resultado = setupService.instalar();
         String[] mensajes = resultado?new String[]{"Se instaló correctamento la aplicación"}:null;
         String[] errores = !resultado?new String[]{"Hubo problemas al instalar"}:null;
+        request.setAttribute("mensajes", mensajes);
+        request.setAttribute("errores", errores);
+    }
+
+    private void desinstalar(HttpServletRequest request, HttpServletResponse response) {
+        SetupService setupService = new SetupService();
+        boolean resultado = setupService.desinstalar();
+        String[] mensajes = resultado?new String[]{"Se desinstaló correctamento la aplicación"}:null;
+        String[] errores = !resultado?new String[]{"Hubo problemas al desinstalar"}:null;
+        request.setAttribute("mensajes", mensajes);
+        request.setAttribute("errores", errores);
+    }
+
+    private void cargarDatos(HttpServletRequest request, HttpServletResponse response) {
+        List<Categoria> listaCategorias = new ArrayList<>();
+        listaCategorias.add(new Categoria("Niños"));
+        listaCategorias.add(new Categoria("Niñas"));
+        listaCategorias.add(new Categoria("Juvenil Hombre"));
+        listaCategorias.add(new Categoria("Juvenil Mujeres"));
+        listaCategorias.add(new Categoria("Hombres"));
+        listaCategorias.add(new Categoria("Mujeres"));
+        
+        CategoriaService categoriaService = new CategoriaService();
+        List<String> errores = new ArrayList<>();
+        List<String> mensajes = new ArrayList<>();
+        
+        for(Categoria categoria: listaCategorias) {
+            Categoria c = categoriaService.crearCategoria(categoria);
+            if(c == null) {
+                errores.add(String.format("No se pudo crear la categoría: %s", categoria.getNombre()));
+            } else {
+                mensajes.add(String.format("Se creó correctamente la categoría: %s", c.getNombre()));
+            }
+        }
+        
         request.setAttribute("mensajes", mensajes);
         request.setAttribute("errores", errores);
     }

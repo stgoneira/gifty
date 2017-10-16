@@ -1,5 +1,7 @@
 package cl.duoc.dej.gifty.entity;
 
+import java.util.Calendar;
+
 /**
  *
  * @author Santiago Neira <sant.neira@profesor.duoc.cl>
@@ -10,6 +12,13 @@ public class Producto {
     private String nombre;
     private Long precio;
     private String imagen;
+    private Calendar fechaCreacion;
+    private Categoria categoria;
+    
+    // bloque de inicialización de variables
+    {
+        fechaCreacion = Calendar.getInstance();
+    }
 
     public Producto() {
     }
@@ -60,5 +69,22 @@ public class Producto {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+    public Calendar getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Calendar fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+    
     
 }

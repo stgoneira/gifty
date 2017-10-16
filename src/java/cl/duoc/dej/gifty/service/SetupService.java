@@ -1,8 +1,8 @@
 package cl.duoc.dej.gifty.service;
 
-import com.sun.xml.ws.api.security.trust.Claims;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +26,7 @@ public class SetupService {
             String sqlCategorias = "CREATE TABLE categorias(\n"
                     + "	id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT\n"
                     + "	, nombre VARCHAR(255) NOT NULL\n"
-                    + "	, fecha_creacion DATE DEFAULT NOT NULL\n"
+                    + "	, fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n"
                     + ");";
             String sqlProductos = "CREATE TABLE productos(\n"
                     + "	id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT\n"
@@ -34,6 +34,7 @@ public class SetupService {
                     + "	, precio BIGINT UNSIGNED NOT NULL\n"
                     + "	, imagen TEXT NOT NULL\n"
                     + "	, categoria_id BIGINT UNSIGNED NOT NULL\n"
+                    + "	, fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n"
                     + " , FOREIGN KEY (categoria_id) REFERENCES categorias(id)"
                     + ");";
 
@@ -41,32 +42,44 @@ public class SetupService {
             logger.log(Level.INFO, "Ejecutando SQL: {0}", sqlCategorias);
             PreparedStatement prepareStatementCategorias = conexion.prepareStatement(sqlCategorias);
             prepareStatementCategorias.execute();
-            
+
             // Creación de tabla Productos
             logger.log(Level.INFO, "Ejecutando SQL: {0}", sqlProductos);
             PreparedStatement prepareStatementProductos = conexion.prepareStatement(sqlProductos);
             prepareStatementProductos.execute();
-            
+
             // commit
             conexion.commit();
-
-            // lo vuelvo al estado original
-            conexion.setAutoCommit(true);
+            
+            logger.log(Level.INFO, "Se instaló correctamente la aplicación.");
             return true;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ocurri\u00f3 un error al intentar realizar la instalaci\u00f3n: {0}", e.getMessage());
+            try {
+                if(conexion != null) 
+                    conexion.rollback();
+            } catch(SQLException e2) {
+                logger.log(Level.SEVERE, "Ocurri\u00f3 un error al realizar el Rollback{0}", e2.getMessage());
+            }
+        } 
         return false;
     }
 
     public boolean desinstalar() {
         try {
-            String sql = "DROP TABLE categorias; DROP TABLE productos;";
-            PreparedStatement prepareStatement = conexion.prepareStatement(sql);
-            prepareStatement.execute();
+            conexion.setAutoCommit(false);
+            String sqlProductos = "DROP TABLE productos";
+            String sqlCategorias = "DROP TABLE categorias";
+            PreparedStatement psProductos = conexion.prepareStatement(sqlProductos);
+            PreparedStatement psCategorias = conexion.prepareStatement(sqlCategorias);
+            psProductos.execute();
+            psCategorias.execute();
+            conexion.commit();
+
+            logger.log(Level.INFO, "Se desinstaló correctamente la aplicación.");
             return true;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ocurri\u00f3 un error al desinstalar:{0}", e.getMessage());
         }
         return false;
     }

@@ -18,10 +18,16 @@
                 <a class="${pageContext.request.servletPath=='/setup.jsp'?'active ':''}nav-link" href="setup.jsp">Instalación</a>
             </li>
             <li class="nav-item">
-                <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/crear.jsp'?'active ':''}nav-link" href="crear">Crear Producto</a>
+                <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/producto/crear.jsp'?'active ':''}nav-link" href="crear">Crear Producto</a>
             </li>
             <li class="nav-item">
-                <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/listar.jsp'?'active ':''}nav-link" href="listar">Listar Productos</a>
+                <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/producto/listar.jsp'?'active ':''}nav-link" href="listar">Listar Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/categoria/crear.jsp'?'active ':''}nav-link" href="crear-categoria">Crear Categoría</a>
+            </li>
+            <li class="nav-item">
+                <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/categoria/listar.jsp'?'active ':''}nav-link" href="listar-categorias">Listar Categorías</a>
             </li>
         </ul>
         <form action="BuscarServlet" method="get" class="form-inline my-2 my-lg-0">

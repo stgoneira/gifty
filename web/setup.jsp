@@ -59,7 +59,7 @@
                             <div class="card-body">
                                 <h4 class="card-title">Desinstalación</h4>
                                 <p class="card-text">Borra las tablas y datos en la base de datos del programa.</p>
-                                <a href="#" class="btn btn-danger">Desintalar</a>
+                                <button type="submit" name="operacion" value="desinstalar" class="btn btn-danger">Desinstalar</button>
                             </div>
                         </div>
                     </div><!-- end col -->
@@ -67,9 +67,9 @@
                         <div class="card" style="width: 20rem;">
                             <img class="card-img-top" src="img/carga.png" alt="Carga datos">
                             <div class="card-body">
-                                <h4 class="card-title">Carga datos de prueba</h4>
+                                <h4 class="card-title">Carga datos</h4>
                                 <p class="card-text">Crea registros de prueba en las tablas de la base de datos del programa.</p>
-                                <a href="#" class="btn btn-primary">Instalar</a>
+                                <button type="submit" name="operacion" value="cargar" class="btn btn-primary">Cargar Datos</button>
                             </div>
                         </div>
                     </div><!-- end col -->
