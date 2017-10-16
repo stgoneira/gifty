@@ -22,7 +22,28 @@
             <div class="row">
                 <div class="col col-lg-6">
                     <h1>Cree y Edite Productos</h1>
-                    <form>
+                    <%-- mensajes --%>
+                    <c:if test="${!empty mensajes}">
+                        <div class="alert alert-primary" role="alert">
+                            <ul>
+                                <c:forEach items="${mensajes}" var="mensaje">
+                                    <li>${mensaje}</li>
+                                    </c:forEach>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <%-- errores --%>
+                    <c:if test="${!empty errores}">
+                        <div class="alert alert-danger" role="alert">
+                            <ul>
+                                <c:forEach items="${errores}" var="error">
+                                    <li>${error}</li>
+                                    </c:forEach>
+                            </ul>
+                        </div>
+                    </c:if>
+                    <form method="post" action="crear">
                         <div class="form-group">
                             <label for="id">ID</label>
                             <input type="number" class="form-control" id="id" name="id" readonly="readonly" aria-describedby="id-help">

@@ -23,21 +23,24 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(String nombre, Long precio, String imagen) {
+    public Producto(String nombre, Long precio, String imagen, Categoria categoria) {
         this.nombre = nombre;
         this.precio = precio;
         this.imagen = imagen;
+        this.categoria = categoria;
     }
 
-    public Producto(Long id, String nombre, Long precio, String imagen) {
+    public Producto(Long id, String nombre, Long precio, String imagen, Categoria categoria, Calendar fechaCreacion) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.imagen = imagen;
+        this.categoria = categoria;
+        this.fechaCreacion = fechaCreacion;
     }
     
+    
     //getters y setters
-
     public Long getId() {
         return id;
     }

@@ -30,8 +30,10 @@
                 <a class="${pageContext.request.servletPath=='/WEB-INF/jsp/categoria/listar.jsp'?'active ':''}nav-link" href="listar-categorias">Listar Categorías</a>
             </li>
         </ul>
-        <form action="BuscarServlet" method="get" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="Buscar">
+            
+            
+        <form action="listar" method="get" class="form-inline my-2 my-lg-0">
+            <input name="producto" class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="Buscar">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
         </form>
     </div>

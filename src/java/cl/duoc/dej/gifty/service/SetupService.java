@@ -25,12 +25,12 @@ public class SetupService {
             conexion.setAutoCommit(false);
             String sqlCategorias = "CREATE TABLE categorias(\n"
                     + "	id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT\n"
-                    + "	, nombre VARCHAR(255) NOT NULL\n"
+                    + "	, nombre VARCHAR(255) UNIQUE NOT NULL\n"
                     + "	, fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP\n"
                     + ");";
             String sqlProductos = "CREATE TABLE productos(\n"
                     + "	id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT\n"
-                    + "	, nombre VARCHAR(255) NOT NULL\n"
+                    + "	, nombre VARCHAR(255) UNIQUE NOT NULL\n"
                     + "	, precio BIGINT UNSIGNED NOT NULL\n"
                     + "	, imagen TEXT NOT NULL\n"
                     + "	, categoria_id BIGINT UNSIGNED NOT NULL\n"
@@ -50,6 +50,9 @@ public class SetupService {
 
             // commit
             conexion.commit();
+            
+            // vuelve al estado original
+            conexion.setAutoCommit(true);
             
             logger.log(Level.INFO, "Se instaló correctamente la aplicación.");
             return true;
@@ -75,6 +78,9 @@ public class SetupService {
             psProductos.execute();
             psCategorias.execute();
             conexion.commit();
+            
+            // vuelve al estado original
+            conexion.setAutoCommit(true);
 
             logger.log(Level.INFO, "Se desinstaló correctamente la aplicación.");
             return true;
@@ -82,14 +88,6 @@ public class SetupService {
             logger.log(Level.SEVERE, "Ocurri\u00f3 un error al desinstalar:{0}", e.getMessage());
         }
         return false;
-    }
-
-    public boolean cargarDatos() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean cargarDatosEjemplo() {
-        throw new UnsupportedOperationException();
     }
 
 }

@@ -3,6 +3,9 @@
     Created on : Oct 9, 2017, 4:51:32 PM
     Author     : Santiago Neira <sant.neira@profesor.duoc.cl>
 --%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,22 +19,21 @@
     <body>
         <div class="container">
             <jsp:include page="/WEB-INF/jspf/menu.jsp" />
-
+            
             <!-- formulario de búsqueda -->
-            <form>
+            <form method="get" action="listar">
                 <div class="form-row align-items-center">
                     <div class="col-6">
                         <label class="sr-only" for="producto">Producto</label>
-                        <input type="text" class="form-control form-control-lg mb-2 mb-sm-0" id="producto" placeholder="Ingrese el nombre del producto a buscar">
+                        <input type="text" name="producto" id="producto" value="${fn:escapeXml(productoBuscado)}" class="form-control form-control-lg mb-2 mb-sm-0" placeholder="Ingrese el nombre del producto a buscar">
                     </div>
                     <div class="col-auto">
                         <label class="sr-only" for="categoria">Categoría</label>
-                        <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="categoria">
+                        <select name="categoria" id="categoria" class="custom-select mb-2 mr-sm-2 mb-sm-0">
                             <option selected>Escoja una categoría</option>
-                            <option value="1">Niños</option>
-                            <option value="2">Niñas</option>
-                            <option value="3">Hombres</option>
-                            <option value="4">Mujeres</option>
+                            <c:forEach items="${categorias}" var="c">
+                                <option value="${c.id}" ${c.id == categoriaBuscada?'selected="true"':''}>${c.nombre}</option>
+                            </c:forEach>
                         </select>
                     </div>
                     <div class="col-auto">
@@ -42,67 +44,72 @@
             <!-- END formulario de búsqueda -->
 
 
-            <!-- tabla con productos -->
-            <table class="table table-striped">
-                <thead class="thead-inverse">
-                    <tr>
-                        <th>ID</th>
-                        <th>Imagen</th>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Categoría</th>
-                        <th>Fecha Creación</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td>
-                            <img src="http://elpoderdelconsumidor.org/wp-content/uploads/2014/12/JuguetesTren-3.jpg" alt="juguete" style="height: 100px; width: auto;" />
-                        </td>
-                        <td>Tren de madera</td>
-                        <td>$15.000.-</td>
-                        <td>Niños</td>
-                        <td>2017-10-09</td>
-                        <td>
-                            <form method="get" action="EliminarServlet">
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>2</th>
-                        <td>
-                            <img src="https://d243u7pon29hni.cloudfront.net/images/products/juguete-electronico-silverlit-digidi-1308459-5_l.jpg" alt="juguete" style="height: 100px; width: auto;" />
-                        </td>
-                        <td>Dinosaurio</td>
-                        <td>$8.000.-</td>
-                        <td>Niños</td>
-                        <td>2017-10-09</td>
-                        <td>
-                            <form method="get" action="EliminarServlet">
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>3</th>
-                        <td>
-                            <img src="https://www.tractordejuguete.com/upload_productos/1_img_1062bruder-2750-camion-remolcador.jpg" alt="juguete" style="height: 100px; width: auto;" />
-                        </td>
-                        <td>Camión grua</td>
-                        <td>$19.500.-</td>
-                        <td>Niños</td>
-                        <td>2017-10-09</td>
-                        <td>
-                            <form method="get" action="EliminarServlet">
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <%-- mensajes --%>
+            <c:if test="${!empty mensajes}">
+                <div class="alert alert-primary" role="alert">
+                    <ul>
+                        <c:forEach items="${mensajes}" var="mensaje">
+                            <li>${mensaje}</li>
+                            </c:forEach>
+                    </ul>
+                </div>
+            </c:if>
+
+            <%-- errores --%>
+            <c:if test="${!empty errores}">
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        <c:forEach items="${errores}" var="error">
+                            <li>${error}</li>
+                            </c:forEach>
+                    </ul>
+                </div>
+            </c:if>
+
+            <c:if test="${empty productos}">
+                No hay productos para mostrar.
+            </c:if>            
+
+            <c:if test="${!empty productos}">
+                <!-- tabla con productos -->
+                <table class="table table-striped">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagen</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Categoría</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${productos}" var="p">
+                            <tr>
+                                <th>${p.id}</th>
+                                <td>
+                                    <img src="${p.imagen}" alt="${p.nombre}" style="height: 100px; width: auto;" />
+                                </td>
+                                <td>${p.nombre}</td>
+                                <td>
+                                    $<fmt:formatNumber value="${p.precio}" />
+                                </td>
+                                <td>${p.categoria.nombre}</td>
+                                <td>
+                                    <fmt:formatDate value="${p.fechaCreacion.time}" pattern="dd MMMM yyyy HH:mm'hrs'" />
+                                </td>
+                                <td>
+                                    <form method="get" action="ProductoEliminarServlet">
+                                        <input type="hidden" name="id" value="${p.id}" />
+                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:if>
         </div>
 
         <jsp:include page="/WEB-INF/jspf/footer.jsp" />

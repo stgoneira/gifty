@@ -10,5 +10,6 @@ public interface CategoriaDAO {
     public boolean eliminarCategoria(Categoria categoria);
     public boolean eliminarCategoria(Long categoriaId);
     public List<Categoria> getCategorias();
+    public Categoria getCategoriaById(Long categoriaId);
     
 }
